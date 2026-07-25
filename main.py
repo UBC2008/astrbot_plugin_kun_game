@@ -14,13 +14,55 @@ from astrbot.api import logger, AstrBotConfig
 # ==================== 常量 ====================
 
 KUN_NAMES = [
-    "菜虚鲲", "将鲲", "犷鲲", "尘鲲", "土鲲", "岩鲲", "石鲲", "沙鲲",
-    "雷鲲", "雪鲲", "虹鲲", "碧鲲", "蓝鲲", "橙鲲", "黑鲲", "暗鲲",
-    "铁头鲲", "钢背鲲", "彩鲲", "炎鲲", "冰鲲", "凶鲲", "恶鲲",
-    "幻鲲", "诡鲲", "炬目鲲", "柯温鲲", "胖头鲲", "阳鲲", "靓鲲",
-    "尸鲲", "血鲲", "骨鲲", "腐鲲", "毒鲲", "妖鲲", "魔鲲",
-    "鬼鲲", "圣鲲", "灵鲲", "冥鲲", "玄鲲", "炫鲲", "帝鲲",
-    "齿鲲", "剑鲲", "铠鲲", "阴鲲", "烈鲲",
+    "菜虚鲲",
+    "将鲲",
+    "犷鲲",
+    "尘鲲",
+    "土鲲",
+    "岩鲲",
+    "石鲲",
+    "沙鲲",
+    "雷鲲",
+    "雪鲲",
+    "虹鲲",
+    "碧鲲",
+    "蓝鲲",
+    "橙鲲",
+    "黑鲲",
+    "暗鲲",
+    "铁头鲲",
+    "钢背鲲",
+    "彩鲲",
+    "炎鲲",
+    "冰鲲",
+    "凶鲲",
+    "恶鲲",
+    "幻鲲",
+    "诡鲲",
+    "炬目鲲",
+    "柯温鲲",
+    "胖头鲲",
+    "阳鲲",
+    "靓鲲",
+    "尸鲲",
+    "血鲲",
+    "骨鲲",
+    "腐鲲",
+    "毒鲲",
+    "妖鲲",
+    "魔鲲",
+    "鬼鲲",
+    "圣鲲",
+    "灵鲲",
+    "冥鲲",
+    "玄鲲",
+    "炫鲲",
+    "帝鲲",
+    "齿鲲",
+    "剑鲲",
+    "铠鲲",
+    "阴鲲",
+    "烈鲲",
 ]
 
 BOSS_NAMES = ["鲲霸", "鲲皇", "鲲帝", "鲲神", "上古鲲鹏", "混沌鲲", "灭世鲲"]
@@ -56,8 +98,10 @@ DEVOUR_BASE_CHANCE = 50
 
 # ==================== 数据管理 ====================
 
+
 def get_data_dir() -> Path:
     from astrbot.core.utils.astrbot_path import get_astrbot_data_path
+
     data_path = get_astrbot_data_path() or Path("data")
     plugin_dir = Path(data_path) / "plugin_data" / "astrbot_plugin_kun_game"
     plugin_dir.mkdir(parents=True, exist_ok=True)
@@ -146,23 +190,26 @@ class GameData:
 
 # ==================== 辅助函数 ====================
 
+
 def format_weight(w: float) -> str:
     if w >= 1000:
-        return f"{w/1000:.1f}吨"
+        return f"{w / 1000:.1f}吨"
     return f"{w:.0f}千克"
 
 
 def parse_qq_id(msg: str) -> str | None:
     """尝试从消息中提取QQ号 (纯数字或@后跟数字)"""
     import re
+
     # 匹配纯数字串（5-12位）
-    m = re.search(r'(\d{5,12})', msg)
+    m = re.search(r"(\d{5,12})", msg)
     if m:
         return m.group(1)
     return None
 
 
 # ==================== 主插件 ====================
+
 
 class KunGamePlugin(Star):
     def __init__(self, context: Context, config: AstrBotConfig = None):
@@ -274,7 +321,9 @@ class KunGamePlugin(Star):
 
     @filter.permission_type(filter.PermissionType.ADMIN)
     @filter.command("修改")
-    async def cmd_admin_edit(self, event: AstrMessageEvent, target_qq: str, project: str, value: str = ""):
+    async def cmd_admin_edit(
+        self, event: AstrMessageEvent, target_qq: str, project: str, value: str = ""
+    ):
         """修改玩家数据: /修改 QQ号 项目 数值  如 /修改 12345 体重 +100"""
         gid = event.get_group_id()
         if not gid:
@@ -289,7 +338,9 @@ class KunGamePlugin(Star):
         if result:
             yield event.plain_result(result)
         else:
-            yield event.plain_result("格式: /修改 QQ号 项目 数值\n项目: 鲲/体重/属性/节操/蛋/神器/幻化丹/鸡汤/复活药/运势")
+            yield event.plain_result(
+                "格式: /修改 QQ号 项目 数值\n项目: 鲲/体重/属性/节操/蛋/神器/幻化丹/鸡汤/复活药/运势"
+            )
         event.stop_event()
 
     # ==================== 消息入口 ====================
@@ -308,7 +359,17 @@ class KunGamePlugin(Star):
         is_private = gid is None
 
         # 私聊支持的命令
-        private_ok = {"签到", "砸蛋", "磨炼", "幻化", "查阅属性", "今日运势", "命令菜单", "喝鸡汤", "当前游戏"}
+        private_ok = {
+            "签到",
+            "砸蛋",
+            "磨炼",
+            "幻化",
+            "查阅属性",
+            "今日运势",
+            "命令菜单",
+            "喝鸡汤",
+            "当前游戏",
+        }
         cmd_part, args_part = self._parse_cmd(msg)
 
         if is_private:
@@ -323,7 +384,9 @@ class KunGamePlugin(Star):
         group = self.data.get_group(gid)
 
         try:
-            result = await self._handle_command(cmd_part, args_part, uid, gid, name, group, event)
+            result = await self._handle_command(
+                cmd_part, args_part, uid, gid, name, group, event
+            )
             if result:
                 yield event.plain_result(result)
                 event.stop_event()
@@ -334,15 +397,21 @@ class KunGamePlugin(Star):
     def _parse_cmd(self, msg: str) -> tuple[str, str]:
         """解析 *命令 参数"""
         prefix = self.config.get("command_prefix", "*")
-        msg = msg[len(prefix):]  # 去掉前缀
+        msg = msg[len(prefix) :]  # 去掉前缀
         parts = msg.split(maxsplit=1)
         cmd = parts[0] if parts else ""
         args = parts[1] if len(parts) > 1 else ""
         return cmd.strip(), args.strip()
 
     async def _handle_command(
-        self, cmd: str, args: str, uid: str, gid: str, name: str,
-        group: dict, event: AstrMessageEvent,
+        self,
+        cmd: str,
+        args: str,
+        uid: str,
+        gid: str,
+        name: str,
+        group: dict,
+        event: AstrMessageEvent,
     ) -> str | None:
         player = self.data.get_player(gid, uid)
 
@@ -387,9 +456,15 @@ class KunGamePlugin(Star):
             "出售": lambda: self._auction_sell(player, uid, name, args, group),
             "出价": lambda: self._auction_bid(player, uid, name, args, group),
             "成交": lambda: self._auction_deal(player, uid, name, group),
-            "免疫强袭": lambda: self._immunity(player, uid, name, args, "anti_assault", group),
-            "免疫吞噬": lambda: self._immunity(player, uid, name, args, "anti_devour", group),
-            "免疫攻击": lambda: self._immunity(player, uid, name, args, "anti_attack", group),
+            "免疫强袭": lambda: self._immunity(
+                player, uid, name, args, "anti_assault", group
+            ),
+            "免疫吞噬": lambda: self._immunity(
+                player, uid, name, args, "anti_devour", group
+            ),
+            "免疫攻击": lambda: self._immunity(
+                player, uid, name, args, "anti_attack", group
+            ),
             "查骰子": lambda: self._roll_dice(player, name, args),
             "奥数比赛": lambda: self._start_mini_game(group, "math"),
             "数星星": lambda: self._start_mini_game(group, "star"),
@@ -503,17 +578,27 @@ class KunGamePlugin(Star):
         if len(parts) != 3:
             return None
 
-        target_qq, project, value_str = parts[0].strip(), parts[1].strip(), parts[2].strip()
+        target_qq, project, value_str = (
+            parts[0].strip(),
+            parts[1].strip(),
+            parts[2].strip(),
+        )
 
         if not target_qq.isdigit():
             return None
 
         target = self.data.get_player(group["gid"], target_qq)
         valid_projects = {
-            "鲲": "kun", "体重": "weight", "属性": "attribute",
-            "节操": "jie_cao", "蛋": "eggs", "神器": "divine_weapon",
-            "幻化丹": "phantom_pills", "鸡汤": "chicken_soup",
-            "复活药": "resurrection_pills", "运势": "luck",
+            "鲲": "kun",
+            "体重": "weight",
+            "属性": "attribute",
+            "节操": "jie_cao",
+            "蛋": "eggs",
+            "神器": "divine_weapon",
+            "幻化丹": "phantom_pills",
+            "鸡汤": "chicken_soup",
+            "复活药": "resurrection_pills",
+            "运势": "luck",
         }
 
         if project not in valid_projects:
@@ -658,7 +743,7 @@ class KunGamePlugin(Star):
         return "\n".join(lines)
 
     def _check_luck(self, player: dict, name: str) -> str:
-        return f"@{name} 今日运势：{player['luck']}\n砸蛋出道具概率={player['luck']/200*100:.1f}%"
+        return f"@{name} 今日运势：{player['luck']}\n砸蛋出道具概率={player['luck'] / 200 * 100:.1f}%"
 
     def _death_list(self, group: dict) -> str:
         dlist = group.get("death_list", [])
@@ -688,11 +773,30 @@ class KunGamePlugin(Star):
             bp = self._get_top_weight(group)
             weight = bp + 1000
         else:
-            attrs = ["无", "魑", "魅", "魍", "魉", "淫", "馋", "贪", "惰", "怒", "妒", "傲"]
+            attrs = [
+                "无",
+                "魑",
+                "魅",
+                "魍",
+                "魉",
+                "淫",
+                "馋",
+                "贪",
+                "惰",
+                "怒",
+                "妒",
+                "傲",
+            ]
             attr = random.choice(attrs)
             weight = random.randint(DEFAULT_WEIGHT_MIN, DEFAULT_WEIGHT_MAX)
 
-        player["kun"] = {"name": random.choice(KUN_NAMES), "weight": weight, "attribute": attr, "alive": True, "killer": None}
+        player["kun"] = {
+            "name": random.choice(KUN_NAMES),
+            "weight": weight,
+            "attribute": attr,
+            "alive": True,
+            "killer": None,
+        }
         self.data.save()
 
         attr_desc = KUN_ATTRIBUTES.get(attr, "未知")
@@ -783,12 +887,16 @@ class KunGamePlugin(Star):
 
         total = weapons + pills + soups + revive
         if total == 0:
-            msg_parts.append("里面并没有奖品，只有尚未成型的鲲宝宝...悔恨的泪水止不住的流。。。")
+            msg_parts.append(
+                "里面并没有奖品，只有尚未成型的鲲宝宝...悔恨的泪水止不住的流。。。"
+            )
             player["luck"] = max(0, player["luck"] - 2)
         else:
             player["luck"] = min(100, player["luck"] + total)
 
-        msg_parts.append(f"\n现有神器：{player['divine_weapon']}，幻化丹：{player['phantom_pills']}，鸡汤：{player['chicken_soup']}，复活药：{player['resurrection_pills']}")
+        msg_parts.append(
+            f"\n现有神器：{player['divine_weapon']}，幻化丹：{player['phantom_pills']}，鸡汤：{player['chicken_soup']}，复活药：{player['resurrection_pills']}"
+        )
         return "\n".join(msg_parts)
 
     # ---- 喂食 ----
@@ -818,7 +926,9 @@ class KunGamePlugin(Star):
         # 馋属性体重超1000暴死
         if kun["attribute"] == "馋" and kun["weight"] > 1000:
             kun["alive"] = False
-            group.setdefault("death_list", []).append({"qq": player["qq"], "reason": "馋属性暴食而死"})
+            group.setdefault("death_list", []).append(
+                {"qq": player["qq"], "reason": "馋属性暴食而死"}
+            )
             self.data.save()
             return f"@{name} 因暴食而死！\n人为鸟死，鲲为食亡！"
 
@@ -878,7 +988,9 @@ class KunGamePlugin(Star):
             # 检查馋属性暴死
             if kun["attribute"] == "馋" and kun["weight"] > 1000:
                 kun["alive"] = False
-                group.setdefault("death_list", []).append({"qq": player["qq"], "reason": "馋属性磨炼暴食而死"})
+                group.setdefault("death_list", []).append(
+                    {"qq": player["qq"], "reason": "馋属性磨炼暴食而死"}
+                )
                 return f"@{name} 因暴食而死！人为鸟死，鲲为食亡！"
             return f"@{name} 磨炼失败！【{kun['attribute']}】体重增加{format_weight(value)}，现体重{format_weight(kun['weight'])}"
 
@@ -903,7 +1015,20 @@ class KunGamePlugin(Star):
         player["phantom_pills"] -= 1
 
         # 随机新属性（无属性不可获得悲，幻化无法获得悲）
-        all_attrs = ["无", "魑", "魅", "魍", "魉", "淫", "馋", "贪", "惰", "怒", "妒", "傲"]
+        all_attrs = [
+            "无",
+            "魑",
+            "魅",
+            "魍",
+            "魉",
+            "淫",
+            "馋",
+            "贪",
+            "惰",
+            "怒",
+            "妒",
+            "傲",
+        ]
         # 去掉当前属性
         available = [a for a in all_attrs if a != kun["attribute"]]
         new_attr = random.choice(available)
@@ -958,8 +1083,14 @@ class KunGamePlugin(Star):
         return self._pvp_action(player, uid, name, args, "", group, "throw_egg")
 
     def _pvp_action(
-        self, player: dict, uid: str, name: str, args: str,
-        gid: str, group: dict, action: str,
+        self,
+        player: dict,
+        uid: str,
+        name: str,
+        args: str,
+        gid: str,
+        group: dict,
+        action: str,
     ) -> str:
         kun = player.get("kun")
         if not kun or not kun.get("alive", True):
@@ -1034,8 +1165,13 @@ class KunGamePlugin(Star):
         return max(0, min(1, base))
 
     def _do_devour(
-        self, player: dict, target: dict, name: str, target_id: str,
-        gid: str, group: dict,
+        self,
+        player: dict,
+        target: dict,
+        name: str,
+        target_id: str,
+        gid: str,
+        group: dict,
     ) -> str:
         a_kun = player["kun"]
         d_kun = target["kun"]
@@ -1062,21 +1198,29 @@ class KunGamePlugin(Star):
         success = random.random() < rate
 
         if success:
-            dmg = a_kun["weight"] * (random.uniform(0.3, 0.6) if not critical else CRITICAL_MULTIPLIER)
+            dmg = a_kun["weight"] * (
+                random.uniform(0.3, 0.6) if not critical else CRITICAL_MULTIPLIER
+            )
             d_kun["weight"] -= dmg
 
             if d_kun["weight"] <= 0 or critical:
                 d_kun["alive"] = False
                 d_kun["killer"] = player["qq"]
-                group.setdefault("death_list", []).append({"qq": target_id, "reason": f"被{name}吞噬"})
+                group.setdefault("death_list", []).append(
+                    {"qq": target_id, "reason": f"被{name}吞噬"}
+                )
                 a_kun["weight"] += d_kun["weight"] if d_kun["weight"] > 0 else 0
 
                 # 淫属性: 75%对方狗带 -> 已触发, 对方已死, 这里处理吞噬者也被反噬
                 if d_kun["attribute"] == "淫" and random.random() < 0.75:
                     a_kun["alive"] = False
-                    group.setdefault("death_list", []).append({"qq": player["qq"], "reason": "被淫属性反噬"})
+                    group.setdefault("death_list", []).append(
+                        {"qq": player["qq"], "reason": "被淫属性反噬"}
+                    )
                     self.data.save()
-                    return f"@{name} 吞噬了{target_id}的鲲，但被淫属性反噬！双方同归于尽！"
+                    return (
+                        f"@{name} 吞噬了{target_id}的鲲，但被淫属性反噬！双方同归于尽！"
+                    )
 
                 self.data.save()
                 return (
@@ -1090,14 +1234,18 @@ class KunGamePlugin(Star):
             # 馋属性暴死检查
             if a_kun["attribute"] == "馋" and a_kun["weight"] > 1000:
                 a_kun["alive"] = False
-                group.setdefault("death_list", []).append({"qq": player["qq"], "reason": "馋属性暴食而死"})
+                group.setdefault("death_list", []).append(
+                    {"qq": player["qq"], "reason": "馋属性暴食而死"}
+                )
                 self.data.save()
                 return f"@{name} 吞噬成功但因暴食而死！\n友情提示：多行不义必自毙！"
 
             # 淫属性反噬
             if d_kun["attribute"] == "淫" and random.random() < 0.75:
                 a_kun["alive"] = False
-                group.setdefault("death_list", []).append({"qq": player["qq"], "reason": "被淫属性反噬"})
+                group.setdefault("death_list", []).append(
+                    {"qq": player["qq"], "reason": "被淫属性反噬"}
+                )
                 self.data.save()
                 return f"@{name} 吞噬成功但{target_id}的淫属性反噬了你！你狗带了！"
 
@@ -1123,7 +1271,9 @@ class KunGamePlugin(Star):
 
             if a_kun["weight"] <= 0:
                 a_kun["alive"] = False
-                group.setdefault("death_list", []).append({"qq": player["qq"], "reason": "吞噬失败反噬而死"})
+                group.setdefault("death_list", []).append(
+                    {"qq": player["qq"], "reason": "吞噬失败反噬而死"}
+                )
                 self.data.save()
                 return f"@{name} 吞噬失败！为食而死！\n吞噬要量力而为啊！"
 
@@ -1131,8 +1281,13 @@ class KunGamePlugin(Star):
             return f"@{name} 吞噬失败！体重减少{format_weight(loss)}\n剩余体重{format_weight(a_kun['weight'])}"
 
     def _do_attack(
-        self, player: dict, target: dict, name: str, target_id: str,
-        gid: str, group: dict,
+        self,
+        player: dict,
+        target: dict,
+        name: str,
+        target_id: str,
+        gid: str,
+        group: dict,
     ) -> str:
         a_kun = player["kun"]
         d_kun = target["kun"]
@@ -1157,13 +1312,19 @@ class KunGamePlugin(Star):
         critical = a_kun["attribute"] == "怒" and random.random() < 0.25
 
         # 攻击伤害计算
-        dmg = a_kun["weight"] * random.uniform(0.1, 0.3) * (CRITICAL_MULTIPLIER if critical else 1)
+        dmg = (
+            a_kun["weight"]
+            * random.uniform(0.1, 0.3)
+            * (CRITICAL_MULTIPLIER if critical else 1)
+        )
         d_kun["weight"] -= dmg
 
         if d_kun["weight"] <= 0:
             d_kun["alive"] = False
             d_kun["killer"] = player["qq"]
-            group.setdefault("death_list", []).append({"qq": target_id, "reason": f"被{name}攻击致死"})
+            group.setdefault("death_list", []).append(
+                {"qq": target_id, "reason": f"被{name}攻击致死"}
+            )
             self.data.save()
             return (
                 f"@{name} 发起攻击！\n"
@@ -1190,13 +1351,17 @@ class KunGamePlugin(Star):
         self.data.save()
         return (
             f"@{name} 发起攻击！\n{target_id}体重减少{format_weight(dmg)}\n"
-            f"剩余体重{format_weight(d_kun['weight'])}"
-            + egg_msg
+            f"剩余体重{format_weight(d_kun['weight'])}" + egg_msg
         )
 
     def _do_assault(
-        self, player: dict, target: dict, name: str, target_id: str,
-        gid: str, group: dict,
+        self,
+        player: dict,
+        target: dict,
+        name: str,
+        target_id: str,
+        gid: str,
+        group: dict,
     ) -> str:
         if player["divine_weapon"] <= 0:
             return f"@{name} 你没有神器+夨￥宀♂牮√，无法发动强袭\n【{self.prefix}砸蛋】可获得+夨￥宀♂牮√"
@@ -1216,7 +1381,9 @@ class KunGamePlugin(Star):
             if target["kun"]["weight"] <= 0:
                 target["kun"]["alive"] = False
                 target["kun"]["killer"] = player["qq"]
-                group.setdefault("death_list", []).append({"qq": target_id, "reason": f"被{name}强袭致死"})
+                group.setdefault("death_list", []).append(
+                    {"qq": target_id, "reason": f"被{name}强袭致死"}
+                )
                 self.data.save()
                 return (
                     f"@{name} 悄悄向{target_id}投掷了+夨￥宀♂牮√！\n"
@@ -1291,7 +1458,12 @@ class KunGamePlugin(Star):
 
     def _generate_boss(self) -> dict:
         attrs_combo = [
-            ["魅", "魍"], ["魑", "惰"], ["怒", "傲"], ["魅", "魉"], ["淫"], ["妒"],
+            ["魅", "魍"],
+            ["魑", "惰"],
+            ["怒", "傲"],
+            ["魅", "魉"],
+            ["淫"],
+            ["妒"],
         ]
         return {
             "name": random.choice(BOSS_NAMES),
@@ -1305,17 +1477,29 @@ class KunGamePlugin(Star):
             "anti_attack": [],
         }
 
-    def _attack_boss(self, player: dict, uid: str, name: str, group: dict, gid: str) -> str:
+    def _attack_boss(
+        self, player: dict, uid: str, name: str, group: dict, gid: str
+    ) -> str:
         return self._boss_action(player, uid, name, group, "attack", gid)
 
-    def _devour_boss(self, player: dict, uid: str, name: str, group: dict, gid: str) -> str:
+    def _devour_boss(
+        self, player: dict, uid: str, name: str, group: dict, gid: str
+    ) -> str:
         return self._boss_action(player, uid, name, group, "devour", gid)
 
-    def _assault_boss(self, player: dict, uid: str, name: str, group: dict, gid: str) -> str:
+    def _assault_boss(
+        self, player: dict, uid: str, name: str, group: dict, gid: str
+    ) -> str:
         return self._boss_action(player, uid, name, group, "assault", gid)
 
     def _boss_action(
-        self, player: dict, uid: str, name: str, group: dict, action: str, gid: str,
+        self,
+        player: dict,
+        uid: str,
+        name: str,
+        group: dict,
+        action: str,
+        gid: str,
     ) -> str:
         boss = group.get("boss")
         if not boss:
@@ -1386,7 +1570,9 @@ class KunGamePlugin(Star):
         if kun["weight"] <= 0:
             kun["alive"] = False
             kun["killer"] = "BOSS"
-            group.setdefault("death_list", []).append({"qq": uid, "reason": "讨伐BOSS阵亡"})
+            group.setdefault("death_list", []).append(
+                {"qq": uid, "reason": "讨伐BOSS阵亡"}
+            )
             self.data.save()
             return (
                 f"@{name} 对BOSS造成了{format_weight(dmg)}伤害！\n"
@@ -1451,12 +1637,12 @@ class KunGamePlugin(Star):
             )
         else:
             kun["alive"] = False
-            group.setdefault("death_list", []).append({"qq": player["qq"], "reason": "渡劫失败"})
+            group.setdefault("death_list", []).append(
+                {"qq": player["qq"], "reason": "渡劫失败"}
+            )
             self.data.save()
             return (
-                f"@{name} 粉身碎骨灰飞烟灭！\n"
-                f"渡劫失败！\n"
-                f"剩余节操：{player['jie_cao']}"
+                f"@{name} 粉身碎骨灰飞烟灭！\n渡劫失败！\n剩余节操：{player['jie_cao']}"
             )
 
     # ---- 放生 ----
@@ -1587,7 +1773,9 @@ class KunGamePlugin(Star):
             return "请输入正确数值！"
 
         if bid <= auc["current_bid"]:
-            return f"拍卖行消息：\n出价失败！\n出价必须大于当前竞价：{auc['current_bid']}"
+            return (
+                f"拍卖行消息：\n出价失败！\n出价必须大于当前竞价：{auc['current_bid']}"
+            )
 
         if player["jie_cao"] < bid:
             return f"拍卖行消息：\n出价失败！\n节操不足！当前节操：{player['jie_cao']}"
@@ -1602,9 +1790,7 @@ class KunGamePlugin(Star):
             f"卖家发送【{self.prefix}成交】完成交易"
         )
 
-    def _auction_deal(
-        self, player: dict, uid: str, name: str, group: dict
-    ) -> str:
+    def _auction_deal(self, player: dict, uid: str, name: str, group: dict) -> str:
         auc = group.get("auction")
         if not auc:
             return "拍卖行消息：\n你没有在售的鲲！"
@@ -1633,11 +1819,7 @@ class KunGamePlugin(Star):
 
         group["auction"] = None
         self.data.save()
-        return (
-            f"拍卖行消息：\n"
-            f"交♂易成功！\n"
-            f"{name}的鲲以{price}节操卖给了{bidder}！"
-        )
+        return f"拍卖行消息：\n交♂易成功！\n{name}的鲲以{price}节操卖给了{bidder}！"
 
     def _auction_force_delist(self, group: dict, args: str) -> str:
         auc = group.get("auction")
@@ -1678,8 +1860,13 @@ class KunGamePlugin(Star):
 
     # ---- 免疫 ----
     def _immunity(
-        self, player: dict, uid: str, name: str, args: str,
-        immunity_type: str, group: dict,
+        self,
+        player: dict,
+        uid: str,
+        name: str,
+        args: str,
+        immunity_type: str,
+        group: dict,
     ) -> str:
         kun = player.get("kun")
         if not kun:
@@ -1732,7 +1919,13 @@ class KunGamePlugin(Star):
         return "未知游戏类型"
 
     def _start_math_game(self, group: dict) -> str:
-        mg = {"type": "奥数比赛", "slots_used": 0, "max_slots": 5, "participants": [], "rewards": {}}
+        mg = {
+            "type": "奥数比赛",
+            "slots_used": 0,
+            "max_slots": 5,
+            "participants": [],
+            "rewards": {},
+        }
         a, b = random.randint(1, 99), random.randint(1, 99)
         op = random.choice(["+", "-", "*"])
         if op == "+":
@@ -1748,19 +1941,31 @@ class KunGamePlugin(Star):
         return f"奥数比赛【总名额5】\n问：{mg['question']}\n回复【{self.prefix}=数值】来抢答\n剩余名额：5"
 
     def _start_star_game(self, group: dict) -> str:
-        mg = {"type": "数星星", "slots_used": 0, "max_slots": 2, "participants": [], "rewards": {}}
+        mg = {
+            "type": "数星星",
+            "slots_used": 0,
+            "max_slots": 2,
+            "participants": [],
+            "rewards": {},
+        }
         stars = random.randint(5, 20)
         black = random.randint(1, min(5, stars))
-        mg["question"] = f"☆☆★☆★★☆★☆☆★☆★★★☆★☆★★☆★☆★☆"[:stars*2]
+        mg["question"] = f"☆☆★☆★★☆★☆☆★☆★★★☆★☆★★☆★☆★☆"[: stars * 2]
         mg["answer"] = str(black)
         group["mini_game"] = mg
         self.data.save()
         return f"数星星【总名额2】\n问：有多少黑色星星\n回复【{self.prefix}=数值】来抢答\n剩余名额：2"
 
     def _start_homework_game(self, group: dict) -> str:
-        mg = {"type": "抄作业", "slots_used": 0, "max_slots": 5, "participants": [], "rewards": {}}
+        mg = {
+            "type": "抄作业",
+            "slots_used": 0,
+            "max_slots": 5,
+            "participants": [],
+            "rewards": {},
+        }
         chars = "ABCDEFGHJKLMN0123456789"
-        question = ''.join(random.choice(chars) for _ in range(random.randint(4, 8)))
+        question = "".join(random.choice(chars) for _ in range(random.randint(4, 8)))
         mg["question"] = question
         mg["answer"] = question[::-1]  # 倒序
         group["mini_game"] = mg
@@ -1768,12 +1973,20 @@ class KunGamePlugin(Star):
         return f"抄作业【总名额5】\n答案：倒序抄写问题\n原文：{question}\n回复【{self.prefix}=答案】获取节操\n剩余名额：5"
 
     def _start_slap_game(self, group: dict) -> str:
-        mg = {"type": "群殴群主", "slots_used": 0, "max_slots": 5, "participants": [], "rewards": {}}
+        mg = {
+            "type": "群殴群主",
+            "slots_used": 0,
+            "max_slots": 5,
+            "participants": [],
+            "rewards": {},
+        }
         group["mini_game"] = mg
         self.data.save()
         return f"群殴群主【总名额5】\n回复【{self.prefix}抽群主一个大嘴巴】获取节操\n剩余名额：5"
 
-    def _mini_game_answer(self, answer: str, uid: str, name: str, group: dict) -> str | None:
+    def _mini_game_answer(
+        self, answer: str, uid: str, name: str, group: dict
+    ) -> str | None:
         mg = group.get("mini_game")
         if not mg:
             return None
@@ -1878,4 +2091,3 @@ class KunGamePlugin(Star):
                 f"节操-5，当前节操：{player['jie_cao']}\n"
                 f"回复【{self.prefix}单挑群主】继续挑战"
             )
-
