@@ -1,0 +1,44 @@
+{
+  "command_prefix": {
+    "description": "命令前缀",
+    "type": "string",
+    "default": "*",
+    "hint": "用于触发游戏命令的前缀"
+  },
+  "default_jie_cao": {
+    "description": "初始节操",
+    "type": "int",
+    "default": 50,
+    "hint": "新玩家初始节操值"
+  },
+  "default_luck": {
+    "description": "初始运势",
+    "type": "int",
+    "default": 50,
+    "hint": "新玩家初始运势值"
+  },
+  "egg_price": {
+    "description": "蛋价（节操）",
+    "type": "int",
+    "default": 5,
+    "hint": "购买一颗蛋需要的节操数"
+  },
+  "tribulation_cost": {
+    "description": "渡劫消耗（节操）",
+    "type": "int",
+    "default": 10,
+    "hint": "进行一次渡劫消耗的节操"
+  },
+  "train_daily_max": {
+    "description": "每日磨炼上限",
+    "type": "int",
+    "default": 30,
+    "hint": "每日免费磨炼次数上限"
+  },
+  "hatch_misfortune_rate": {
+    "description": "悲属性孵化率",
+    "type": "float",
+    "default": 0.007,
+    "hint": "孵化出悲属性的概率 (0.007 = 0.7%)"
+  }
+}
